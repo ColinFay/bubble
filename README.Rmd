@@ -1,0 +1,113 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+DISCLAIMER: THIS IS A WORK IN PROGRESS, DO NOT USE UNLESS FOR TESTING / TOYING WITH THE PACKAGE. 
+
+# bubble
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of `{bubble}` is to launch and interact with a NodeJS session, from R. 
+
+## Installation
+
+You can install the dev version of `{bubble}` with:
+
+``` r
+remotes::install_github("colinfay/bubble")
+```
+
+## Example
+
+> Note that you'll need to have NodeJS installed on your machine
+
+### Using bubble to launch and communicate with a NodeJS session
+
+Launch a new NodeJS session with `NodeSession$new()`. 
+
+This function takes the path to your NodeJS binary. It returns an object that can be used to interact with the launched Node session. 
+
+```{r example}
+library(bubble)
+
+n <- NodeSession$new( bin = "/usr/local/bin/node" )
+n$eval("var x = 12")
+n$eval("var y = 17")
+n$eval("x + ")
+n$eval("y")
+# Return the x and y values
+x <- n$get(x, y)
+class(x)
+sum(x)
+n$state()
+n$terminate()
+n$state()
+```
+
+### Using {bubble} to launch an express app
+
+```{r}
+n <- NodeSession$new( bin = "/usr/local/bin/node")
+
+n$eval("const express = require('express');")
+n$eval("app = express()", print = FALSE)
+
+n$eval("app.get('/', function (req, res) {")
+n$eval("  res.send('Hello R!')")
+n$eval("})", print = FALSE)
+n$eval("app.listen(3000)", print = FALSE)
+
+x <- httr::GET("http://127.0.0.1:3000") 
+httr::content(x)
+n$kill()
+```
+
+
+```{r include = FALSE}
+Sys.sleep(5)
+```
+
+
+### Using {bubble} to launch a NodeJS terminal
+
+```{r eval = FALSE}
+node_repl()
+```
+
+![](man/figures/node_repl.gif)
+
+### Using {bubble} to launch a NodeJS script
+
+```{r}
+n <- NodeSession$new( 
+  bin = "/usr/local/bin/node", 
+  params = system.file(
+    "launch.js", 
+    package = "bubble"
+  )
+)
+x <- httr::GET("http://127.0.0.1:3000") 
+httr::content(x)
+n$terminate()
+n$state()
+n$eval("var x = 12")
+```
+
+## CoC
+
+Please note that the 'bubble' project is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
