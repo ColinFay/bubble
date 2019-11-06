@@ -29,15 +29,16 @@ remotes::install_github("colinfay/bubble")
 
 Launch a new NodeJS session with `NodeSession$new()`.
 
-This function takes the path to your NodeJS binary. It returns an object
-that can be used to interact with the launched Node session.
+This function uses the path to your NodeJS binary. On MacOS, it can be
+found with `Sys.which("node")`, on Debian `Sys.which("nodejs")` (if
+installed through `apt-get install nodejs`).
 
-On MacOS, it can be found with `Sys.which("node")`, on Debian
-`Sys.which("nodejs")` (if installed through `apt-get install nodejs`).
-
-`NodeSession$new()` tries to guess where Node is by looking at both
+`NodeSession$new()` tries to guess where NodeJS is by looking at both
 these `Sys`. If they are both empty, you’ll get an error, and need to
 provide the path manually.
+
+This function returns an object that can be used to interact with the
+launched Node session.
 
 ``` r
 library(bubble)
@@ -61,7 +62,7 @@ n$state()
 n$terminate()
 #> [1] TRUE
 n$state()
-#> [1] "terminated"
+#> [1] "running"
 ```
 
 ### Using {bubble} to launch an express app
