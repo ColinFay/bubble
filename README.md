@@ -59,10 +59,10 @@ sum(x)
 #> [1] 29
 n$state()
 #> [1] "running"
-n$terminate()
+n$kill()
 #> [1] TRUE
 n$state()
-#> [1] "running"
+#> [1] "terminated"
 ```
 
 ### Using {bubble} to launch an express app

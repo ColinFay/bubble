@@ -58,7 +58,7 @@ x <- n$get(x, y)
 class(x)
 sum(x)
 n$state()
-n$terminate()
+n$kill()
 n$state()
 ```
 
