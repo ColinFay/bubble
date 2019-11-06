@@ -17,6 +17,19 @@ handle_reses <- function(reses){
   return(np)
 }
 
+try_get_node <- function(){
+  x <- Sys.which("nodejs")
+  if (x == ""){
+    x <- Sys.which("node")
+  }
+  if (x == ""){
+    stop("Couldn't find NodeJS.\nPlease provide its path manually.")
+    return(NULL)
+  } else {
+    return(x)
+  }
+}
+
 
 #' NodeJS REPL
 #'

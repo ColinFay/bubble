@@ -1,7 +1,7 @@
 library(bubble)
 library(testthat)
 
-n <- NodeSession$new( bin = "/usr/bin/nodejs" )
+n <- NodeSession$new( bin = Sys.which("nodejs") )
 
 cli::cat_line("Check NodeSession class")
 expect_is(n, "NodeSession")
@@ -25,7 +25,7 @@ expect_equal(n$state(), "running")
 expect_true(n$terminate())
 expect_equal(n$state(), "terminated")
 
-n <- NodeSession$new( bin = "/usr/bin/nodejs")
+n <- NodeSession$new( bin = Sys.which("nodejs"))
 
 n$eval("const express = require('express');")
 n$eval("app = express()", print = FALSE)

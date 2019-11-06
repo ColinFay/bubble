@@ -13,9 +13,13 @@ NodeSession <- R6::R6Class(
     bin = NULL,
     handle = NULL,
     initialize = function(
-      bin,
+      bin = NULL,
       params = "-i"
     ){
+
+      if (is.null(bin)){
+        bin <- try_get_node()
+      }
       self$bin <- bin
       self$handle <- spawn_process(self$bin, params)
       process_read(self$handle, PIPE_STDOUT, timeout = 5000)
