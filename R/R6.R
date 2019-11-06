@@ -1,3 +1,7 @@
+#' NodeJS Session
+#'
+#' Launch a NodeJS Session
+#'
 #' @importFrom subprocess spawn_process process_read process_write PIPE_STDOUT process_kill process_state process_terminate
 #' @importFrom utils savehistory loadhistory
 #' @importFrom cli cat_rule cat_line

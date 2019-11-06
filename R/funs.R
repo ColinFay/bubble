@@ -20,7 +20,7 @@ handle_reses <- function(reses){
 
 #' NodeJS REPL
 #'
-#' @param node path to your node bin
+#' @param bin path to your node bin
 #'
 #' @return a NodeJS REPL
 #' @export

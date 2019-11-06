@@ -7,7 +7,7 @@
 node_repl(bin = "/usr/local/bin/node")
 }
 \arguments{
-\item{node}{path to your node bin}
+\item{bin}{path to your node bin}
 }
 \value{
 a NodeJS REPL

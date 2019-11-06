@@ -1,20 +1,20 @@
 Package: bubble
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
+Title: Launch and Interact with a NodeJS Session
+Version: 0.0.0.9000
 Authors@R: c(person(given = "Colin",
              family = "Fay",
              role = c("cre", "aut"),
              email = "contact@colinfay.me",
              comment = c(ORCID = "0000-0001-7343-1846")))  
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: Launch and Interact with a NodeJS Session.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
     R6,
     cli,
     crayon,
-    subprocess
+    subprocess,
+    rlang
 RoxygenNote: 6.1.1

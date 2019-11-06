@@ -102,8 +102,6 @@ n <- NodeSession$new(
 x <- httr::GET("http://127.0.0.1:3000") 
 httr::content(x)
 n$terminate()
-n$state()
-n$eval("var x = 12")
 ```
 
 ## CoC
