@@ -1,6 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+DISCLAIMER: THIS IS A WORK IN PROGRESS, DO NOT USE UNLESS FOR TESTING /
+TOYING WITH THE PACKAGE.
+
 # bubble
 
 <!-- badges: start -->
@@ -20,12 +23,26 @@ remotes::install_github("colinfay/bubble")
 
 ## Example
 
+> Note that you’ll need to have NodeJS installed on your machine
+
 ### Using bubble to launch and communicate with a NodeJS session
+
+Launch a new NodeJS session with `NodeSession$new()`.
+
+This function takes the path to your NodeJS binary. It returns an object
+that can be used to interact with the launched Node session.
+
+On MacOS, it can be found with `Sys.which("node")`, on Debian
+`Sys.which("nodejs")` (if installed through `apt-get install nodejs`).
+
+`NodeSession$new()` tries to guess where Node is by looking at both
+these `Sys`. If they are both empty, you’ll get an error, and need to
+provide the path manually.
 
 ``` r
 library(bubble)
 
-n <- NodeSession$new( bin = "/usr/local/bin/node" )
+n <- NodeSession$new() # On my laptop, found with `Sys.which("node")`
 n$eval("var x = 12")
 #> undefined
 n$eval("var y = 17")
@@ -33,22 +50,18 @@ n$eval("var y = 17")
 n$eval("x + ")
 n$eval("y")
 #> 29
-x <- n$get("x")
-y <- n$get("y")
+# Return the x and y values
+x <- n$get(x, y)
 class(x)
 #> [1] "integer"
-class(y)
-#> [1] "integer"
-y + x
+sum(x)
 #> [1] 29
 n$state()
 #> [1] "running"
-n$kill()
+n$terminate()
 #> [1] TRUE
 n$state()
 #> [1] "terminated"
-n$kill()
-#> Process already terminated
 ```
 
 ### Using {bubble} to launch an express app
@@ -80,7 +93,10 @@ n$kill()
 node_repl()
 ```
 
-![](man/figures/node_repl.gif)
+![](readme-fig/node_repl.gif)
+
+> This REPL has been inspired by the one from `{reticulate}` :
+> <https://rstudio.github.io/reticulate/>
 
 ### Using {bubble} to launch a NodeJS script
 
@@ -97,6 +113,12 @@ httr::content(x)
 #> {html_document}
 #> <html>
 #> [1] <body><p>Hello R!</p></body>
-n$kill()
-#> Process already terminated
+n$terminate()
+#> [1] TRUE
 ```
+
+## CoC
+
+Please note that the ‘bubble’ project is released with a [Contributor
+Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project,
+you agree to abide by its terms.

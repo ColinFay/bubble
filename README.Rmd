@@ -34,16 +34,21 @@ remotes::install_github("colinfay/bubble")
 
 > Note that you'll need to have NodeJS installed on your machine
 
+
 ### Using bubble to launch and communicate with a NodeJS session
 
 Launch a new NodeJS session with `NodeSession$new()`. 
 
 This function takes the path to your NodeJS binary. It returns an object that can be used to interact with the launched Node session. 
 
+On MacOS, it can be found with `Sys.which("node")`, on Debian `Sys.which("nodejs")` (if installed through `apt-get install nodejs`).
+
+`NodeSession$new()` tries to guess where Node is by looking at both these `Sys`. If they are both empty, you'll get an error, and need to provide the path manually.
+
 ```{r example}
 library(bubble)
 
-n <- NodeSession$new( bin = "/usr/local/bin/node" )
+n <- NodeSession$new() # On my laptop, found with `Sys.which("node")`
 n$eval("var x = 12")
 n$eval("var y = 17")
 n$eval("x + ")
@@ -87,7 +92,9 @@ Sys.sleep(5)
 node_repl()
 ```
 
-![](man/figures/node_repl.gif)
+![](readme-fig/node_repl.gif)
+
+> This REPL has been inspired by the one from `{reticulate}` : https://rstudio.github.io/reticulate/
 
 ### Using {bubble} to launch a NodeJS script
 
