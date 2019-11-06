@@ -16,5 +16,6 @@ Imports:
     cli,
     crayon,
     subprocess,
-    rlang
+    rlang,
+    jsonlite
 RoxygenNote: 6.1.1
