@@ -17,6 +17,9 @@ handle_reses <- function(reses){
   return(np)
 }
 
+
+#' Try to get the path to the NodeJS bin 
+#' @export
 try_get_node <- function(){
   x <- Sys.which("nodejs")
   if (x == ""){
