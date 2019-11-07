@@ -18,7 +18,7 @@ NodeSession <- R6::R6Class(
     ){
 
       if (is.null(bin)){
-        bin <- try_get_node()
+        bin <- find_node()
       }
       self$bin <- bin
       self$handle <- spawn_process(self$bin, params)

@@ -4,7 +4,7 @@
 \alias{node_repl}
 \title{NodeJS REPL}
 \usage{
-node_repl(bin = "/usr/local/bin/node")
+node_repl(bin = find_node())
 }
 \arguments{
 \item{bin}{path to your node bin}
