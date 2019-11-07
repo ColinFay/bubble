@@ -38,7 +38,7 @@ try_get_node <- function(){
 #' @return a NodeJS REPL
 #' @export
 node_repl <- function(
-  bin = "/usr/local/bin/node"
+  bin = try_get_node()
 ){
   NodeREPL$new(bin)
 }
