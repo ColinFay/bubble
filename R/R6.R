@@ -89,7 +89,7 @@ NodeREPL <- R6::R6Class(
   public = list(
     np = NULL,
     initialize = function(
-      bin
+      bin = NULL
     ){
       super$initialize(
         bin,
