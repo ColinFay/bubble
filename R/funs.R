@@ -1,5 +1,3 @@
-library(subprocess)
-
 #' @importFrom cli cat_line
 #' @importFrom crayon blue
 handle_res <- function(res){
@@ -18,9 +16,9 @@ handle_reses <- function(reses){
 }
 
 
-#' Try to get the path to the NodeJS bin 
+#' Try to get the path to the NodeJS bin
 #' @export
-try_get_node <- function(){
+find_node <- function(){
   x <- Sys.which("nodejs")
   if (x == ""){
     x <- Sys.which("node")
@@ -41,7 +39,7 @@ try_get_node <- function(){
 #' @return a NodeJS REPL
 #' @export
 node_repl <- function(
-  bin = try_get_node()
+  bin = find_node()
 ){
   NodeREPL$new(bin)
 }
