@@ -22,3 +22,24 @@ Chunks are linked to each other:
 ```{node}
 console.log(x + y)
 ```
+
+## More complex example:
+
+```{node include = FALSE}
+const express = require('express')
+const app = express()
+
+app.get('/', function (req, res) {
+  res.send('Hello R!')
+})
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!')
+})
+
+```
+
+```{r}
+httr::GET("http://127.0.0.1:3000") 
+```
+
