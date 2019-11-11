@@ -3,6 +3,7 @@
 export(NodeSession)
 export(find_node)
 export(node_repl)
+export(set_node_engine)
 importFrom(cli,cat_line)
 importFrom(cli,cat_rule)
 importFrom(crayon,blue)

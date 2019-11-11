@@ -35,15 +35,22 @@ installed through `apt-get install nodejs`).
 
 `NodeSession$new()` tries to guess where NodeJS is by looking at both
 these `Sys`. If they are both empty, you’ll get an error, and need to
-provide the path manually.
-
-This function returns an object that can be used to interact with the
-launched Node session.
+provide the path manually. The function to find Node is exported and
+called `find_node()`. It will either return the path to your local
+installation of Node or an error
 
 ``` r
 library(bubble)
+find_node()
+#>                  node 
+#> "/usr/local/bin/node"
+```
 
-n <- NodeSession$new() # On my laptop, found with `Sys.which("node")`
+The `NodeSession$new()` function returns an object that can be used to
+interact with the launched Node session.
+
+``` r
+n <- NodeSession$new() 
 n$eval("var x = 12")
 #> undefined
 n$eval("var y = 17")
@@ -68,24 +75,26 @@ n$state()
 ### Using {bubble} to launch an express app
 
 ``` r
-n <- NodeSession$new( bin = "/usr/local/bin/node")
+n <- NodeSession$new()
 
 n$eval("const express = require('express');")
 #> undefined
 n$eval("app = express()", print = FALSE)
 
-n$eval("app.get('/', function (req, res) {")
+n$eval("app.get('/', function (req, res) {", print = FALSE)
 n$eval("  res.send('Hello R!')")
 n$eval("})", print = FALSE)
-n$eval("app.listen(3000)", print = FALSE)
+n$eval("app.listen(3002)", print = FALSE)
 
-x <- httr::GET("http://127.0.0.1:3000") 
+x <- httr::GET("http://127.0.0.1:3002") 
 httr::content(x)
 #> {html_document}
 #> <html>
 #> [1] <body><p>Hello R!</p></body>
 n$kill()
 #> [1] TRUE
+httr::GET("http://127.0.0.1:3002") 
+#> Error in curl::curl_fetch_memory(url, handle = handle): Failed to connect to 127.0.0.1 port 3002: Connection refused
 ```
 
 ### Using {bubble} to launch a NodeJS terminal
@@ -103,11 +112,8 @@ node_repl()
 
 ``` r
 n <- NodeSession$new( 
-  bin = "/usr/local/bin/node", 
-  params = system.file(
-    "launch.js", 
-    package = "bubble"
-  )
+  bin = "/usr/local/bin/node",
+  params = "inst/launch.js"
 )
 x <- httr::GET("http://127.0.0.1:3000") 
 httr::content(x)
@@ -117,6 +123,15 @@ httr::content(x)
 n$terminate()
 #> [1] TRUE
 ```
+
+### Knitr
+
+`{bubble}` comes with a knitr engine that can be set with
+`bubble::set_node_engine()` at the top of your markdown.
+
+Then, each chunck `{node}` will be evaluated in a Node session.
+
+You’ll find an example in [inst/rmdexample.Rmd](inst/rmdexample.Rmd)
 
 ## CoC
 

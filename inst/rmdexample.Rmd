@@ -1,0 +1,24 @@
+---
+title: "Bubble knitr engine"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+bubble::set_node_engine()
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Run node in Markdown
+
+Eval NodeJS code in Markdown
+
+```{node}
+var x = 12; 
+var y = 17;
+```
+
+Chunks are linked to each other:
+
+```{node}
+console.log(x + y)
+```

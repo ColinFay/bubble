@@ -41,14 +41,17 @@ Launch a new NodeJS session with `NodeSession$new()`.
 
 This function uses the path to your NodeJS binary. On MacOS, it can be found with `Sys.which("node")`, on Debian `Sys.which("nodejs")` (if installed through `apt-get install nodejs`).
 
-`NodeSession$new()` tries to guess where NodeJS is by looking at both these `Sys`. If they are both empty, you'll get an error, and need to provide the path manually.
+`NodeSession$new()` tries to guess where NodeJS is by looking at both these `Sys`. If they are both empty, you'll get an error, and need to provide the path manually. The function to find Node is exported and called `find_node()`. It will either return the path to your local installation of Node or an error
 
-This function returns an object that can be used to interact with the launched Node session.
+```{r}
+library(bubble)
+find_node()
+```
+
+The `NodeSession$new()` function returns an object that can be used to interact with the launched Node session.
 
 ```{r example}
-library(bubble)
-
-n <- NodeSession$new() # On my laptop, found with `Sys.which("node")`
+n <- NodeSession$new() 
 n$eval("var x = 12")
 n$eval("var y = 17")
 n$eval("x + ")
@@ -64,20 +67,21 @@ n$state()
 
 ### Using {bubble} to launch an express app
 
-```{r}
-n <- NodeSession$new( bin = "/usr/local/bin/node")
+```{r error = TRUE}
+n <- NodeSession$new()
 
 n$eval("const express = require('express');")
 n$eval("app = express()", print = FALSE)
 
-n$eval("app.get('/', function (req, res) {")
+n$eval("app.get('/', function (req, res) {", print = FALSE)
 n$eval("  res.send('Hello R!')")
 n$eval("})", print = FALSE)
-n$eval("app.listen(3000)", print = FALSE)
+n$eval("app.listen(3002)", print = FALSE)
 
-x <- httr::GET("http://127.0.0.1:3000") 
+x <- httr::GET("http://127.0.0.1:3002") 
 httr::content(x)
 n$kill()
+httr::GET("http://127.0.0.1:3002") 
 ```
 
 
@@ -100,16 +104,22 @@ node_repl()
 
 ```{r}
 n <- NodeSession$new( 
-  bin = "/usr/local/bin/node", 
-  params = system.file(
-    "launch.js", 
-    package = "bubble"
-  )
+  bin = "/usr/local/bin/node",
+  params = "inst/launch.js"
 )
 x <- httr::GET("http://127.0.0.1:3000") 
 httr::content(x)
 n$terminate()
 ```
+
+### Knitr
+
+`{bubble}` comes with a knitr engine that can be set with `bubble::set_node_engine()` at the top of your markdown. 
+
+Then, each chunck `{node}` will be evaluated in a Node session. 
+
+You'll find an example in [inst/rmdexample.Rmd](inst/rmdexample.Rmd)
+
 
 ## CoC
 
