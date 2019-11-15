@@ -166,8 +166,15 @@ NpmSession <- R6::R6Class(
       build_ignore <- c("package.json", "package-lock.json", git_ignore)
       
       # might not be a package
-      err <- tryCatch(usethis::use_build_ignore(build_ignore), error = function(e) e)
-      usethis::use_git_ignore(git_ignore)
+      build_ignore_out <- tryCatch(
+        usethis::use_build_ignore(build_ignore), 
+        error = function(e) e
+      )
+      git_ignore_out <- tryCatch(
+        usethis::use_git_ignore(git_ignore), 
+        error = function(e) e
+      )
+
     },
     install = function(package = NULL, global = FALSE){
 
