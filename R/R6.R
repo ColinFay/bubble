@@ -147,11 +147,20 @@ NodeREPL <- R6::R6Class(
 #' 
 #' Create and interact with npm. 
 #' 
+#' @section Public fields:
+#' * `bin`: Path to npm bin directory.
 #' @export
 NpmSession <- R6::R6Class(
   "NpmSession",
   public = list(
     bin = NULL,
+#' @details
+#' Initialise npm
+#' 
+#' @param bin Path to npm bin directory.
+#' 
+#' @examples
+#' \dontrun{NpmSession$new()}
     initialize = function(bin = NULL){
       if (is.null(bin)){
         bin <- find_npm()
@@ -176,6 +185,15 @@ NpmSession <- R6::R6Class(
       )
 
     },
+#' @details
+#' Install dependencies
+#' 
+#' @param package Name of npm package to install. If \code{NULL}
+#' install dependencies from lock file.
+#' @param global Whether to install globally.
+#' 
+#' @examples
+#' \dontrun{NpmSession$new()$install("browserify")}
     install = function(package = NULL, global = FALSE){
 
       # install globally or locally

@@ -6,6 +6,25 @@
 \description{
 Create and interact with npm.
 }
+\section{Public fields}{
+
+* `bin`: Path to npm bin directory.
+}
+
+\examples{
+
+## ------------------------------------------------
+## Method `NpmSession$new`
+## ------------------------------------------------
+
+\dontrun{NpmSession$new()}
+
+## ------------------------------------------------
+## Method `NpmSession$install`
+## ------------------------------------------------
+
+\dontrun{NpmSession$new()$install("browserify")}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -21,12 +40,53 @@ Create and interact with npm.
 \if{html}{\out{<div class="r">}}\preformatted{NpmSession$new(bin = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{bin}}{Path to npm bin directory.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Initialise npm
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{NpmSession$new()}
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-install"></a>}}
 \subsection{Method \code{install()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NpmSession$install(package = NULL, global = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{package}}{Name of npm package to install. If \code{NULL}
+install dependencies from lock file.}
+
+\item{\code{global}}{Whether to install globally.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Install dependencies
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{NpmSession$new()$install("browserify")}
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
