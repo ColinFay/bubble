@@ -141,3 +141,50 @@ NodeREPL <- R6::R6Class(
   )
 
 )
+
+
+#' Node Package Manager
+#' 
+#' Create and interact with npm. 
+#' 
+#' @export
+NpmSession <- R6::R6Class(
+  "NpmSession",
+  public = list(
+    bin = NULL,
+    initialize = function(bin = NULL){
+      if (is.null(bin)){
+        bin <- find_npm()
+      }
+      self$bin <- bin
+
+      init <- system2(self$bin, "init -y", stdout = TRUE)
+
+      # ignore all on rbuildignore
+      # keep package.json in git for easy project share
+      git_ignore <- c("node_modules")
+      build_ignore <- c("package.json", "package-lock.json", git_ignore)
+      
+      # might not be a package
+      err <- tryCatch(usethis::use_build_ignore(build_ignore), error = function(e) e)
+      usethis::use_git_ignore(git_ignore)
+    },
+    install = function(package = NULL, global = FALSE){
+
+      # install globally or locally
+      option <- ifelse(global, "-g", "--save")
+      
+      # install npm repo
+      if(is.null(package)){
+        args <- paste("install", option)
+        install <- system2(self$bin, args, stdout = TRUE)
+        return(self)
+      }
+
+      args <- paste("install", option, package)
+      install <- system2(self$bin, args, stdout = TRUE)
+      
+      invisible(self)
+    }
+  )
+)

@@ -44,4 +44,15 @@ node_repl <- function(
   NodeREPL$new(bin)
 }
 
+#' Find Node Package Manager
+#' @export 
+find_npm <- function(){
+  x <- Sys.which("npm")
+  if (x == ""){
+    stop("Couldn't find npm.\nPlease provide its path manually.")
+    return(NULL)
+  } else {
+    return(x)
+  }
+}
 

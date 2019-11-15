@@ -18,5 +18,6 @@ Imports:
     subprocess,
     rlang,
     jsonlite,
-    knitr
-RoxygenNote: 6.1.1
+    knitr,
+    usethis
+RoxygenNote: 7.0.0
