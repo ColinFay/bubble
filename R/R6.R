@@ -252,12 +252,12 @@ Npm <- R6::R6Class(
 #' Execute command
 #' 
 #' @param command Command to execute.
-#' @param args Additional arguments and flags.
+#' @param ... Additional arguments and flags.
 #' 
 #' @examples
 #' \dontrun{Npm$new()$cmd("ls")}
-    cmd = function(command, args = NULL){
-      args <- paste(command, args)
+    cmd = function(command, ...){
+      args <- paste(command, ..., collapse = " ")
       system2(
         command = self$bin,
         args = args,

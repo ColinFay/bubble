@@ -80,7 +80,7 @@ Initialise npm
 \if{html}{\out{<a id="method-cmd"></a>}}
 \subsection{Method \code{cmd()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Npm$cmd(command, args = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Npm$cmd(command, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -88,7 +88,7 @@ Initialise npm
 \describe{
 \item{\code{command}}{Command to execute.}
 
-\item{\code{args}}{Additional arguments and flags.}
+\item{\code{...}}{Additional arguments and flags.}
 }
 \if{html}{\out{</div>}}
 }
