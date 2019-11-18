@@ -7,11 +7,26 @@
 #' @importFrom cli cat_rule cat_line
 #' @importFrom rlang enquos quo_name
 #' @export
+#' 
+#' @field bin Path to NodeJs bin directory.
+#' @field handle A handle as returned by \link[subprocess]{spawn_process}.
 NodeSession <- R6::R6Class(
   "NodeSession",
   public = list(
     bin = NULL,
     handle = NULL,
+#' @details
+#' Initialise a NodeJs session
+#' 
+#' @param bin Path to NodeJs bin directory, if \code{NULL} then bubble 
+#' attemtpts to find the directory with \code{\link{find_node}}. 
+#' @param params Additional parameters to pass to the initialisation.
+#' 
+#' @examples
+#' \dontrun{
+#' n <- NodeSession$new()
+#' n$eval("17 + 29")
+#' }
     initialize = function(
       bin = NULL,
       params = "-i"
@@ -24,9 +39,23 @@ NodeSession <- R6::R6Class(
       self$handle <- spawn_process(self$bin, params)
       process_read(self$handle, PIPE_STDOUT, timeout = 5000)
     },
+#' @details
+#' Terminate a NodeJs session
     finalize = function(){
       self$kill()
     },
+#' @details
+#' Evaluate NodeJs code
+#' 
+#' @param code The code to evaluate.
+#' @param wait Whether to re-attempt to evaluate if it first fails.
+#' @param print Whether to print the result to the R console.
+#' 
+#' @examples
+#' \dontrun{
+#' n <- NodeSession$new()
+#' n$eval("17 + 29")
+#' }
     eval = function(code, wait = TRUE, print = TRUE){
       process_write(self$handle, paste(code, "\n"))
       res <- process_read(self$handle, PIPE_STDOUT, timeout = 0)
@@ -41,6 +70,18 @@ NodeSession <- R6::R6Class(
         return(invisible(res[-length(res)]))
       }
     },
+#' @details
+#' Retrieve NodeJs objects
+#' 
+#' @param ... Bare name of objects to retreive.
+#' 
+#' @examples
+#' \dontrun{
+#' n <- NodeSession$new()
+#' n$eval("var x = 12")
+#' n$eval("var y = 17")
+#' n$get(x, y)
+#' }
     get = function(...){
       var <- enquos(...)
       var <- vapply(
@@ -59,9 +100,28 @@ NodeSession <- R6::R6Class(
         )
       )
     },
+#' @details
+#' Retrieve NodeJs state
+#' 
+#' @examples
+#' \dontrun{
+#' n <- NodeSession$new()
+#' n$state()
+#' n$kill()
+#' n$state()
+#' }
     state = function(){
       process_state(self$handle)
     },
+#' @details
+#' Kill NodeJs
+#' 
+#' @examples
+#' \dontrun{
+#' n <- NodeSession$new()
+#' n$kill()
+#' n$state()
+#' }
     kill = function(){
       if (self$state() != "terminated"){
         process_kill(self$handle)
@@ -71,6 +131,15 @@ NodeSession <- R6::R6Class(
       }
 
     },
+#' @details
+#' Terminate NodeJs
+#' 
+#' @examples
+#' \dontrun{
+#' n <- NodeSession$new()
+#' n$terminate()
+#' n$state()
+#' }
     terminate = function(){
       if (self$state() != "terminated"){
         process_terminate(self$handle)
@@ -147,11 +216,10 @@ NodeREPL <- R6::R6Class(
 #' 
 #' Create and interact with npm. 
 #' 
-#' @section Public fields:
-#' * `bin`: Path to npm bin directory.
+#' @field bin Path to npm bin directory.
 #' @export
-NpmSession <- R6::R6Class(
-  "NpmSession",
+Npm <- R6::R6Class(
+  "Npm",
   public = list(
     bin = NULL,
 #' @details
@@ -160,7 +228,7 @@ NpmSession <- R6::R6Class(
 #' @param bin Path to npm bin directory.
 #' 
 #' @examples
-#' \dontrun{NpmSession$new()}
+#' \dontrun{Npm$new()}
     initialize = function(bin = NULL){
       if (is.null(bin)){
         bin <- find_npm()
@@ -173,17 +241,28 @@ NpmSession <- R6::R6Class(
       # keep package.json in git for easy project share
       git_ignore <- c("node_modules")
       build_ignore <- c("package.json", "package-lock.json", git_ignore)
-      
-      # might not be a package
-      build_ignore_out <- tryCatch(
-        usethis::use_build_ignore(build_ignore), 
-        error = function(e) e
-      )
-      git_ignore_out <- tryCatch(
-        usethis::use_git_ignore(git_ignore), 
-        error = function(e) e
+
+      cat(
+        crayon::green(cli::symbol$pointer), " Add `", crayon::blue("node_modules"), "` to .gitignore\n",
+        sep = ""
       )
 
+    },
+#' @details
+#' Execute command
+#' 
+#' @param command Command to execute.
+#' @param args Additional arguments and flags.
+#' 
+#' @examples
+#' \dontrun{Npm$new()$cmd("ls")}
+    cmd = function(command, args = NULL){
+      args <- paste(command, args)
+      system2(
+        command = self$bin,
+        args = args,
+        stdout = TRUE
+      ) 
     },
 #' @details
 #' Install dependencies
@@ -193,20 +272,13 @@ NpmSession <- R6::R6Class(
 #' @param global Whether to install globally.
 #' 
 #' @examples
-#' \dontrun{NpmSession$new()$install("browserify")}
+#' \dontrun{Npm$new()$install("browserify")}
     install = function(package = NULL, global = FALSE){
 
       # install globally or locally
       option <- ifelse(global, "-g", "--save")
-      
-      # install npm repo
-      if(is.null(package)){
-        args <- paste("install", option)
-        install <- system2(self$bin, args, stdout = TRUE)
-        return(self)
-      }
-
       args <- paste("install", option, package)
+
       install <- system2(self$bin, args, stdout = TRUE)
       
       invisible(self)

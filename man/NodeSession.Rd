@@ -6,6 +6,77 @@
 \description{
 Launch a NodeJS Session
 }
+\examples{
+
+## ------------------------------------------------
+## Method `NodeSession$new`
+## ------------------------------------------------
+
+\dontrun{
+n <- NodeSession$new()
+n$eval("17 + 29")
+}
+
+## ------------------------------------------------
+## Method `NodeSession$eval`
+## ------------------------------------------------
+
+\dontrun{
+n <- NodeSession$new()
+n$eval("17 + 29")
+}
+
+## ------------------------------------------------
+## Method `NodeSession$get`
+## ------------------------------------------------
+
+\dontrun{
+n <- NodeSession$new()
+n$eval("var x = 12")
+n$eval("var y = 17")
+n$get(x, y)
+}
+
+## ------------------------------------------------
+## Method `NodeSession$state`
+## ------------------------------------------------
+
+\dontrun{
+n <- NodeSession$new()
+n$state()
+n$kill()
+n$state()
+}
+
+## ------------------------------------------------
+## Method `NodeSession$kill`
+## ------------------------------------------------
+
+\dontrun{
+n <- NodeSession$new()
+n$kill()
+n$state()
+}
+
+## ------------------------------------------------
+## Method `NodeSession$terminate`
+## ------------------------------------------------
+
+\dontrun{
+n <- NodeSession$new()
+n$terminate()
+n$state()
+}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{bin}}{Path to NodeJs bin directory.}
+
+\item{\code{handle}}{A handle as returned by \link[subprocess]{spawn_process}.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -26,12 +97,41 @@ Launch a NodeJS Session
 \if{html}{\out{<div class="r">}}\preformatted{NodeSession$new(bin = NULL, params = "-i")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{bin}}{Path to NodeJs bin directory, if \code{NULL} then bubble 
+attemtpts to find the directory with \code{\link{find_node}}.}
+
+\item{\code{params}}{Additional parameters to pass to the initialisation.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Initialise a NodeJs session
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+n <- NodeSession$new()
+n$eval("17 + 29")
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
 \subsection{Method \code{finalize()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NodeSession$finalize()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Terminate a NodeJs session
 }
 
 }
@@ -42,12 +142,62 @@ Launch a NodeJS Session
 \if{html}{\out{<div class="r">}}\preformatted{NodeSession$eval(code, wait = TRUE, print = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{code}}{The code to evaluate.}
+
+\item{\code{wait}}{Whether to re-attempt to evaluate if it first fails.}
+
+\item{\code{print}}{Whether to print the result to the R console.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Evaluate NodeJs code
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+n <- NodeSession$new()
+n$eval("17 + 29")
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get"></a>}}
 \subsection{Method \code{get()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NodeSession$get(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Bare name of objects to retreive.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Retrieve NodeJs objects
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+n <- NodeSession$new()
+n$eval("var x = 12")
+n$eval("var y = 17")
+n$get(x, y)
+}
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -58,6 +208,23 @@ Launch a NodeJS Session
 \if{html}{\out{<div class="r">}}\preformatted{NodeSession$state()}\if{html}{\out{</div>}}
 }
 
+\subsection{Details}{
+Retrieve NodeJs state
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+n <- NodeSession$new()
+n$state()
+n$kill()
+n$state()
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-kill"></a>}}
@@ -66,12 +233,44 @@ Launch a NodeJS Session
 \if{html}{\out{<div class="r">}}\preformatted{NodeSession$kill()}\if{html}{\out{</div>}}
 }
 
+\subsection{Details}{
+Kill NodeJs
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+n <- NodeSession$new()
+n$kill()
+n$state()
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-terminate"></a>}}
 \subsection{Method \code{terminate()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NodeSession$terminate()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Terminate NodeJs
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+n <- NodeSession$new()
+n$terminate()
+n$state()
+}
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
