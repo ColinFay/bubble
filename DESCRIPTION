@@ -6,7 +6,11 @@ Authors@R: c(person(given = "Colin",
              family = "Fay",
              role = c("cre", "aut"),
              email = "contact@colinfay.me",
-             comment = c(ORCID = "0000-0001-7343-1846")))  
+             comment = c(ORCID = "0000-0001-7343-1846")),
+             person(given = "John", 
+             family = "Coene",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-6637-4107")))  
 Description: Launch and Interact with a NodeJS Session.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -18,6 +22,5 @@ Imports:
     subprocess,
     rlang,
     jsonlite,
-    knitr,
-    usethis
+    knitr
 RoxygenNote: 7.0.0
