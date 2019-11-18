@@ -265,7 +265,7 @@ Npm <- R6::R6Class(
       ) 
     },
 #' @details
-#' Install dependencies
+#' Install packages
 #' 
 #' @param package Name of npm package to install. If \code{NULL}
 #' install dependencies from lock file.
@@ -278,6 +278,25 @@ Npm <- R6::R6Class(
       # install globally or locally
       option <- ifelse(global, "-g", "--save")
       args <- paste("install", option, package)
+
+      install <- system2(self$bin, args, stdout = TRUE)
+      
+      invisible(self)
+    },
+#' @details
+#' Uninstall packages
+#' 
+#' @param package Name of npm package to install. If \code{NULL}
+#' install dependencies from lock file.
+#' @param global Whether to install globally.
+#' 
+#' @examples
+#' \dontrun{Npm$new()$install("browserify")}
+    uninstall = function(package = NULL, global = FALSE){
+
+      # install globally or locally
+      option <- ifelse(global, "-g", "--save")
+      args <- paste("uninstall", option, package)
 
       install <- system2(self$bin, args, stdout = TRUE)
       

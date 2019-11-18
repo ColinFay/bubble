@@ -25,6 +25,12 @@ Create and interact with npm.
 ## ------------------------------------------------
 
 \dontrun{Npm$new()$install("browserify")}
+
+## ------------------------------------------------
+## Method `Npm$uninstall`
+## ------------------------------------------------
+
+\dontrun{Npm$new()$install("browserify")}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -39,6 +45,7 @@ Create and interact with npm.
 \item \href{#method-new}{\code{Npm$new()}}
 \item \href{#method-cmd}{\code{Npm$cmd()}}
 \item \href{#method-install}{\code{Npm$install()}}
+\item \href{#method-uninstall}{\code{Npm$uninstall()}}
 \item \href{#method-clone}{\code{Npm$clone()}}
 }
 }
@@ -116,7 +123,37 @@ install dependencies from lock file.}
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-Install dependencies
+Install packages
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{Npm$new()$install("browserify")}
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-uninstall"></a>}}
+\subsection{Method \code{uninstall()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Npm$uninstall(package = NULL, global = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{package}}{Name of npm package to install. If \code{NULL}
+install dependencies from lock file.}
+
+\item{\code{global}}{Whether to install globally.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Uninstall packages
 }
 
 \subsection{Examples}{
