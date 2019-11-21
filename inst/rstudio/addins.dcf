@@ -1,0 +1,5 @@
+Name: Node Chunk
+Description: Add a node Rmd Chunk
+Binding: rmd
+Interactive: false
+

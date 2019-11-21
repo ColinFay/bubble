@@ -22,5 +22,6 @@ Imports:
     subprocess,
     rlang,
     jsonlite,
-    knitr
+    knitr,
+    attempt
 RoxygenNote: 7.0.0
