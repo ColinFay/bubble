@@ -15,7 +15,7 @@ rmd <- function(){
   loc <- rstudioapi::getActiveDocumentContext()$selection[[1]]$range
   rstudioapi::insertText(
     location = loc,
-    text = "```{node}\n  \n```\n"
+    text = "```{node}\n\n```\n"
   )
 
   loc$start[[1]] <- loc$start[[1]] + 1
