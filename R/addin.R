@@ -12,8 +12,15 @@ rmd <- function(){
     msg = "Your RStudio version is too old to run this addin."
   )
 
+  loc <- rstudioapi::getActiveDocumentContext()$selection[[1]]$range
   rstudioapi::insertText(
-    location = rstudioapi::getActiveDocumentContext()$selection[[1]]$range,
+    location = loc,
     text = "```{node}\n  \n```\n"
+  )
+
+  loc$start[[1]] <- loc$start[[1]] + 1
+  loc$end[[1]] <- loc$end[[1]] + 1
+  rstudioapi::setCursorPosition(
+    loc
   )
 }
