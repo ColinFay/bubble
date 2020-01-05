@@ -24,4 +24,4 @@ Imports:
     jsonlite,
     knitr,
     attempt
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.2

@@ -71,6 +71,32 @@ NodeSession <- R6::R6Class(
       }
     },
 #' @details
+#' Create NodeJs objects
+#' 
+#' @param name Name of variable to create.post
+#' @param value Value to assign to variable.
+#' 
+#' @examples
+#' \dontrun{
+#' n <- NodeSession$new()
+#' n$assign("cars", cars)
+#' n$get(cars)
+#' }
+    assign = function(name, value){
+
+      if(missing(name))
+        stop("Missing `name`", call. = FALSE)
+
+      if(missing(value))
+        stop("Missing `value`", call. = FALSE)
+
+      json <- as_json(value)
+      json <- json_var(name, json)
+      self$eval(json)
+
+      invisible(self)
+    },
+#' @details
 #' Retrieve NodeJs objects
 #' 
 #' @param ... Bare name of objects to retreive.
