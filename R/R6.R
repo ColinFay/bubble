@@ -92,8 +92,7 @@ NodeSession <- R6::R6Class(
       if(missing(value))
         stop("Missing `value`", call. = FALSE)
 
-      json <- as_json(value)
-      json <- json_var(name, json)
+      json <- as_json(name, value)
       self$eval(json)
 
       invisible(self)
@@ -140,7 +139,12 @@ NodeSession <- R6::R6Class(
           node_object <- gsub("^'|'$", "", node_object)
 
           # from JSON to R
-          results <- jsonlite::fromJSON(node_object)
+          results <- tryCatch(
+            jsonlite::fromJSON(node_object),
+            error = function(e){
+              stop("Cannot parse results.", call. = FALSE)
+            }
+          )
         }
 
         return(results)

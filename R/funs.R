@@ -63,11 +63,7 @@ find_npm <- function(){
 #' 
 #' @name json_conversion
 #' @keywords internal 
-as_json <- function(value){
-  jsonlite::toJSON(value, auto_unbox = TRUE, pretty = FALSE, force = TRUE)
-}
-
-#' @name json_conversion
-json_var <- function(name, value){
+as_json <- function(name, value){
+  value <- jsonlite::toJSON(value, auto_unbox = TRUE, pretty = FALSE, force = TRUE)
   paste0('var ', name, ' = JSON.parse(\'', value, '\');', collapse = '')
 }

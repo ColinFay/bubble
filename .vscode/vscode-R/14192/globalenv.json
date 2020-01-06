@@ -1,0 +1,8 @@
+{
+  "n": {
+    "class": ["NodeSession", "R6"],
+    "type": "environment",
+    "length": 12,
+    "str": ["Classes 'NodeSession', 'R6' <NodeSession>", "Public:", "assign: function (name, value)", "bin: /usr/bin/nodejs", "clone: function (deep = FALSE)", "eval: function (code, wait = TRUE, print = TRUE)", "finalize: function ()", "get: function (...)", "handle: process_handle", "initialize: function (bin = NULL, params = \"-i\")", "kill: function ()", "state: function ()", "terminate: function ()"]
+  }
+}

@@ -3,17 +3,14 @@
 \name{json_conversion}
 \alias{json_conversion}
 \alias{as_json}
-\alias{json_var}
 \title{Convert to json}
 \usage{
-as_json(value)
-
-json_var(name, value)
+as_json(name, value)
 }
 \arguments{
-\item{value}{Value to convert.}
-
 \item{name}{Name of variable.}
+
+\item{value}{Value to convert.}
 }
 \description{
 Convert to json
