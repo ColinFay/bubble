@@ -93,7 +93,7 @@ NodeSession <- R6::R6Class(
         stop("Missing `value`", call. = FALSE)
 
       json <- as_json(name, value)
-      self$eval(json)
+      self$eval(json, print = FALSE)
 
       invisible(self)
     },
