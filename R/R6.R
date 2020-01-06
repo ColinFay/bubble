@@ -129,8 +129,11 @@ NodeSession <- R6::R6Class(
           error = function(e) e
         )
 
+        cnt <- 0
+
         # if error ~ JSON
         while(inherits(results, "error")){
+          cnt <- cnt + 1
           # stringify
           stringify <- paste0("JSON.stringify(", x, ")")
           node_object <- self$eval(stringify, print = FALSE)
@@ -143,6 +146,8 @@ NodeSession <- R6::R6Class(
             jsonlite::fromJSON(node_object),
             error = function(e) e
           )
+          if(cnt == 2)
+            break
         }
 
         return(results)
