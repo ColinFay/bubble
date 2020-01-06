@@ -130,7 +130,7 @@ NodeSession <- R6::R6Class(
         )
 
         # if error ~ JSON
-        if(inherits(results, "error")){
+        while(inherits(results, "error")){
           # stringify
           stringify <- paste0("JSON.stringify(", x, ")")
           node_object <- self$eval(stringify, print = FALSE)
@@ -141,9 +141,7 @@ NodeSession <- R6::R6Class(
           # from JSON to R
           results <- tryCatch(
             jsonlite::fromJSON(node_object),
-            error = function(e){
-              stop("Cannot parse results.", call. = FALSE)
-            }
+            error = function(e) e
           )
         }
 
