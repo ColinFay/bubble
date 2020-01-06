@@ -32,8 +32,8 @@ n$eval("17 + 29")
 
 \dontrun{
 n <- NodeSession$new()
-n$assign("cars", cars)
-n$get(cars)
+n$assign(carz, cars)
+n$get(carz)
 }
 
 ## ------------------------------------------------
@@ -204,8 +204,8 @@ Create NodeJs objects
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
 n <- NodeSession$new()
-n$assign("cars", cars)
-n$get(cars)
+n$assign(carz, cars)
+n$get(carz)
 }
 }
 \if{html}{\out{</div>}}

@@ -79,13 +79,15 @@ NodeSession <- R6::R6Class(
 #' @examples
 #' \dontrun{
 #' n <- NodeSession$new()
-#' n$assign("cars", cars)
-#' n$get(cars)
+#' n$assign(carz, cars)
+#' n$get(carz)
 #' }
     assign = function(name, value){
 
       if(missing(name))
         stop("Missing `name`", call. = FALSE)
+
+      name <- rlang::as_label(dplyr::enquo(name))
 
       if(missing(value))
         stop("Missing `value`", call. = FALSE)
@@ -115,16 +117,34 @@ NodeSession <- R6::R6Class(
         quo_name,
         FUN.VALUE = character(1)
       )
-      var <- sprintf(
-        "[%s]",
-        paste(var, collapse = ", ")
-      )
-      jsonlite::fromJSON(
-        self$eval(
-          var,
-          print = FALSE
+      
+      var <- as.list(var)
+
+      lapply(var, function(x){
+
+        node_object <- self$eval(x, print = FALSE)
+
+        # catch error is object is JSON
+        results <- tryCatch(
+          jsonlite::fromJSON(node_object),
+          error = function(e) e
         )
-      )
+
+        # if error ~ JSON
+        if(inherits(results, "error")){
+          # stringify
+          stringify <- paste0("JSON.stringify(", x, ")")
+          node_object <- self$eval(stringify, print = FALSE)
+
+          # remove surrounding signle quotes
+          node_object <- gsub("^'|'$", "", node_object)
+
+          # from JSON to R
+          results <- jsonlite::fromJSON(node_object)
+        }
+
+        return(results)
+      })
     },
 #' @details
 #' Retrieve NodeJs state

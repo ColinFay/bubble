@@ -24,4 +24,6 @@ Imports:
     jsonlite,
     knitr,
     attempt
+Suggests:
+    rstudioapi
 RoxygenNote: 7.0.2

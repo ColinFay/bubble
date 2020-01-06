@@ -69,5 +69,5 @@ as_json <- function(value){
 
 #' @name json_conversion
 json_var <- function(name, value){
-  paste0("var ", name, " = ", value, ";", collapse = "")
+  paste0('var ', name, ' = JSON.parse(\'', value, '\');', collapse = '')
 }
