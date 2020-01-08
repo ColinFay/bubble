@@ -184,7 +184,7 @@ n$eval("17 + 29")
 \if{html}{\out{<a id="method-assign"></a>}}
 \subsection{Method \code{assign()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NodeSession$assign(name, value)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{NodeSession$assign(name, value, type = c("var", "const"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -193,6 +193,8 @@ n$eval("17 + 29")
 \item{\code{name}}{Name of variable to create.post}
 
 \item{\code{value}}{Value to assign to variable.}
+
+\item{\code{type}}{Type of variable to define.}
 }
 \if{html}{\out{</div>}}
 }

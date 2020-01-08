@@ -75,6 +75,7 @@ NodeSession <- R6::R6Class(
 #' 
 #' @param name Name of variable to create.post
 #' @param value Value to assign to variable.
+#' @param type Type of variable to define.
 #' 
 #' @examples
 #' \dontrun{
@@ -82,17 +83,21 @@ NodeSession <- R6::R6Class(
 #' n$assign(carz, cars)
 #' n$get(carz)
 #' }
-    assign = function(name, value){
+    assign = function(name, value, type = c("var", "const")){
 
       if(missing(name))
         stop("Missing `name`", call. = FALSE)
 
-      name <- rlang::as_label(dplyr::enquo(name))
+      type <- match.arg(type)
+
+      quo_name <- dplyr::enquo(name)
+      name <- rlang::as_label(quo_name)
 
       if(missing(value))
         stop("Missing `value`", call. = FALSE)
 
-      json <- as_json(name, value)
+      # convert value to json array AND variable definition.
+      json <- as_json(name, value, type)
       self$eval(json, print = FALSE)
 
       invisible(self)

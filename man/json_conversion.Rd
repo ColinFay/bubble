@@ -5,12 +5,14 @@
 \alias{as_json}
 \title{Convert to json}
 \usage{
-as_json(name, value)
+as_json(name, value, type)
 }
 \arguments{
 \item{name}{Name of variable.}
 
 \item{value}{Value to convert.}
+
+\item{type}{Variable type.}
 }
 \description{
 Convert to json
