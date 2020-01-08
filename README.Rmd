@@ -1,5 +1,7 @@
 ---
-output: github_document
+output: 
+  github_document:
+    html_preview: false
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -59,7 +61,10 @@ n$eval("y")
 # Return the x and y values
 x <- n$get(x, y)
 class(x)
-sum(x)
+sum(x[[1]])
+# Create a variable
+n$assign(vehicles, cars[1:5,])
+n$get(vehicles)
 n$state()
 n$kill()
 n$state()
