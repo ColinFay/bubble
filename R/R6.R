@@ -295,11 +295,6 @@ Npm <- R6::R6Class(
 
       init <- system2(self$bin, "init -y", stdout = TRUE)
 
-      # ignore all on rbuildignore
-      # keep package.json in git for easy project share
-      git_ignore <- c("node_modules")
-      build_ignore <- c("package.json", "package-lock.json", git_ignore)
-
       cat(
         crayon::green(cli::symbol$pointer), " Add `", crayon::blue("node_modules"), "` to .gitignore\n",
         sep = ""
