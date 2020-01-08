@@ -126,6 +126,27 @@ Then, each chunck `{node}` will be evaluated in a Node session.
 You'll find an example in [inst/rmdexample.Rmd](inst/rmdexample.Rmd)
 
 
+### Using {bubble} with npm
+
+```{r, eval=FALSE}
+library(bubble)
+
+# install kmeans
+npm <- Npm$new()
+npm$install("ml-kmeans")
+
+n <- NodeSession$new()
+n$eval("const kmeans = require('ml-kmeans');")
+data <- dplyr::select_if(iris, is.numeric) 
+data <- unname(data)
+n$assign(iris, data)
+n$eval("var ans = kmeans(iris, 4);")
+n$get(ans) # get clusters
+n$terminate()
+
+npm$uninstall("ml-kmeans")
+```
+
 ## CoC
 
 Please note that the 'bubble' project is released with a
