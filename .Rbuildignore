@@ -5,3 +5,4 @@
 ^LICENSE\.md$
 ^readme-fig$
 ^readme-fig/node_repl\.gif$
+.vscode
