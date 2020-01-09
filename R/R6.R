@@ -5,7 +5,7 @@
 #' @importFrom subprocess spawn_process process_read process_write PIPE_STDOUT process_kill process_state process_terminate
 #' @importFrom utils savehistory loadhistory
 #' @importFrom cli cat_rule cat_line
-#' @importFrom rlang enquos quo_name
+#' @importFrom rlang quo_name as_label enquo
 #' @export
 #' 
 #' @field bin Path to NodeJs bin directory.
@@ -90,8 +90,8 @@ NodeSession <- R6::R6Class(
 
       type <- match.arg(type)
 
-      quo_name <- dplyr::enquo(name)
-      name <- rlang::as_label(quo_name)
+      quo_name <- enquo(name)
+      name <- as_label(quo_name)
 
       if(missing(value))
         stop("Missing `value`", call. = FALSE)
@@ -105,7 +105,7 @@ NodeSession <- R6::R6Class(
 #' @details
 #' Retrieve NodeJs objects
 #' 
-#' @param ... Bare name of objects to retreive.
+#' @param var Bare name of object to retrieve.
 #' 
 #' @examples
 #' \dontrun{
@@ -114,49 +114,40 @@ NodeSession <- R6::R6Class(
 #' n$eval("var y = 17")
 #' n$get(x, y)
 #' }
-    get = function(...){
-      var <- enquos(...)
-      var <- vapply(
-        var,
-        quo_name,
-        FUN.VALUE = character(1)
+    get = function(var){
+      var <- enquo(var)
+      var <- quo_name(var)
+
+      node_object <- self$eval(var, print = FALSE)
+
+      # catch error is object is JSON
+      results <- tryCatch(
+        jsonlite::fromJSON(node_object),
+        error = function(e) e
       )
-      
-      var <- as.list(var)
 
-      lapply(var, function(x){
+      cnt <- 0
 
-        node_object <- self$eval(x, print = FALSE)
+      # if error ~ JSON
+      while(inherits(results, "error")){
+        cnt <- cnt + 1
+        # stringify
+        stringify <- paste0("JSON.stringify(", var, ")")
+        node_object <- self$eval(stringify, print = FALSE)
 
-        # catch error is object is JSON
+        # remove surrounding signle quotes
+        node_object <- gsub("^'|'$", "", node_object)
+
+        # from JSON to R
         results <- tryCatch(
           jsonlite::fromJSON(node_object),
           error = function(e) e
         )
+        if(cnt == 2)
+          break
+      }
 
-        cnt <- 0
-
-        # if error ~ JSON
-        while(inherits(results, "error")){
-          cnt <- cnt + 1
-          # stringify
-          stringify <- paste0("JSON.stringify(", x, ")")
-          node_object <- self$eval(stringify, print = FALSE)
-
-          # remove surrounding signle quotes
-          node_object <- gsub("^'|'$", "", node_object)
-
-          # from JSON to R
-          results <- tryCatch(
-            jsonlite::fromJSON(node_object),
-            error = function(e) e
-          )
-          if(cnt == 2)
-            break
-        }
-
-        return(results)
-      })
+      return(results)
     },
 #' @details
 #' Retrieve NodeJs state

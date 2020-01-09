@@ -58,10 +58,9 @@ n$eval("var x = 12")
 n$eval("var y = 17")
 n$eval("x + ")
 n$eval("y")
-# Return the x and y values
-x <- n$get(x, y)
+# Return the x value
+x <- n$get(x)
 class(x)
-sum(x[[1]])
 # Create a variable
 n$assign(vehicles, cars[1:5,])
 n$get(vehicles)
