@@ -106,8 +106,13 @@ NodeSession <- R6::R6Class(
 
       if(has_fs){
         # import fs if not already done so
-        if(!private$fs_imported)
+        if(!private$fs_imported){
+          cat(
+            crayon::blue(cli::symbol$info),
+            "Importing fs module as", crayon::blue("fs"), "object\n"
+          )
           self$eval("const fs = require('fs')", print = FALSE)
+        }
 
         json_fs <- as_json_file(name, value, type)
         self$eval(json_fs$call, print = FALSE)
