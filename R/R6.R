@@ -38,6 +38,11 @@ NodeSession <- R6::R6Class(
       self$bin <- bin
       self$handle <- spawn_process(self$bin, params)
       process_read(self$handle, PIPE_STDOUT, timeout = 5000)
+
+      # declare node function to check if a module is available
+      # will use to check if fs installed for assign method.
+      self$eval(check_module_avail_node_function, print = FALSE)
+      invisible(self)
     },
 #' @details
 #' Terminate a NodeJs session
@@ -96,8 +101,21 @@ NodeSession <- R6::R6Class(
       if(missing(value))
         stop("Missing `value`", call. = FALSE)
 
+      # check if fs module available
+      has_fs <- check_module_avail(self, "fs")
+
+      if(has_fs){
+        # import fs if not already done so
+        if(!private$fs_imported)
+          self$eval("const fs = require('fs')", print = FALSE)
+
+        json_fs <- as_json_file(name, value, type)
+        self$eval(json_fs$call, print = FALSE)
+        unlink(json_fs$tempfile)
+      }
+
       # convert value to json array AND variable definition.
-      json <- as_json(name, value, type)
+      json <- as_json_string(name, value, type)
       self$eval(json, print = FALSE)
 
       invisible(self)
@@ -198,6 +216,9 @@ NodeSession <- R6::R6Class(
       }
 
     }
+  ),
+  private = list(
+    fs_imported = FALSE
   )
 )
 

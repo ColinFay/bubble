@@ -2,10 +2,13 @@
 % Please edit documentation in R/funs.R
 \name{json_conversion}
 \alias{json_conversion}
-\alias{as_json}
+\alias{as_json_string}
+\alias{as_json_file}
 \title{Convert to json}
 \usage{
-as_json(name, value, type)
+as_json_string(name, value, type)
+
+as_json_file(name, value, type)
 }
 \arguments{
 \item{name}{Name of variable.}
