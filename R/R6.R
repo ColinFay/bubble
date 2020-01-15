@@ -114,10 +114,10 @@ NodeSession <- R6::R6Class(
           self$eval("const fs = require('fs')", print = FALSE)
           private$fs_imported <- TRUE
         }
-
-        json_fs <- as_json_file(name, value, type)
-        self$eval(json_fs$call, print = FALSE)
-        unlink(json_fs$tempfile)
+        
+        json_fs <- as_json_file(name, value, type) # write temp file
+        self$eval(json_fs$call, print = FALSE) # read temp file
+        unlink(json_fs$tempfile, force = TRUE) # delete temp file
       }
 
       # convert value to json array AND variable definition.
