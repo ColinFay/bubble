@@ -112,6 +112,7 @@ NodeSession <- R6::R6Class(
             "Importing fs module as", crayon::blue("fs"), "object\n"
           )
           self$eval("const fs = require('fs')", print = FALSE)
+          private$fs_imported <- TRUE
         }
 
         json_fs <- as_json_file(name, value, type)
@@ -134,41 +135,23 @@ NodeSession <- R6::R6Class(
 #' \dontrun{
 #' n <- NodeSession$new()
 #' n$eval("var x = 12")
-#' n$eval("var y = 17")
-#' n$get(x, y)
+#' n$get(x)
 #' }
     get = function(var){
       var <- enquo(var)
       var <- quo_name(var)
 
-      node_object <- self$eval(var, print = FALSE)
+      stringify <- paste0("JSON.stringify(", var, ", null, 0);")
+      node_object <- self$eval(stringify, print = FALSE)
+
+      # remove surrounding single quotes
+      node_object <- gsub("^'|'$", "", node_object)
 
       # catch error is object is JSON
       results <- tryCatch(
         jsonlite::fromJSON(node_object),
         error = function(e) e
       )
-
-      cnt <- 0
-
-      # if error ~ JSON
-      while(inherits(results, "error")){
-        cnt <- cnt + 1
-        # stringify
-        stringify <- paste0("JSON.stringify(", var, ")")
-        node_object <- self$eval(stringify, print = FALSE)
-
-        # remove surrounding signle quotes
-        node_object <- gsub("^'|'$", "", node_object)
-
-        # from JSON to R
-        results <- tryCatch(
-          jsonlite::fromJSON(node_object),
-          error = function(e) e
-        )
-        if(cnt == 2)
-          break
-      }
 
       return(results)
     },

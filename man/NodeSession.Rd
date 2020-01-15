@@ -43,8 +43,7 @@ n$get(carz)
 \dontrun{
 n <- NodeSession$new()
 n$eval("var x = 12")
-n$eval("var y = 17")
-n$get(x, y)
+n$get(x)
 }
 
 ## ------------------------------------------------
@@ -238,8 +237,7 @@ Retrieve NodeJs objects
 \preformatted{\dontrun{
 n <- NodeSession$new()
 n$eval("var x = 12")
-n$eval("var y = 17")
-n$get(x, y)
+n$get(x)
 }
 }
 \if{html}{\out{</div>}}
