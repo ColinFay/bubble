@@ -5,7 +5,7 @@
 #' @importFrom subprocess spawn_process process_read process_write PIPE_STDOUT process_kill process_state process_terminate
 #' @importFrom utils savehistory loadhistory
 #' @importFrom cli cat_rule cat_line
-#' @importFrom rlang enquos quo_name
+#' @importFrom rlang quo_name as_label enquo
 #' @export
 #' 
 #' @field bin Path to NodeJs bin directory.
@@ -38,6 +38,11 @@ NodeSession <- R6::R6Class(
       self$bin <- bin
       self$handle <- spawn_process(self$bin, params)
       process_read(self$handle, PIPE_STDOUT, timeout = 5000)
+
+      # declare node function to check if a module is available
+      # will use to check if fs installed for assign method.
+      self$eval(check_module_avail_node_function, print = FALSE)
+      invisible(self)
     },
 #' @details
 #' Terminate a NodeJs session
@@ -71,34 +76,84 @@ NodeSession <- R6::R6Class(
       }
     },
 #' @details
+#' Create NodeJs objects
+#' 
+#' @param name Name of variable to create.post
+#' @param value Value to assign to variable.
+#' @param type Type of variable to define.
+#' 
+#' @examples
+#' \dontrun{
+#' n <- NodeSession$new()
+#' n$assign(carz, cars)
+#' n$get(carz)
+#' }
+    assign = function(name, value, type = c("var", "const")){
+
+      if(missing(name))
+        stop("Missing `name`", call. = FALSE)
+
+      type <- match.arg(type)
+
+      quo_name <- enquo(name)
+      name <- as_label(quo_name)
+
+      if(missing(value))
+        stop("Missing `value`", call. = FALSE)
+
+      # check if fs module available
+      has_fs <- check_module_avail(self, "fs")
+
+      if(has_fs){
+        # import fs if not already done so
+        if(!private$fs_imported){
+          cat(
+            crayon::blue(cli::symbol$info),
+            "Importing fs module as", crayon::blue("fs"), "object\n"
+          )
+          self$eval("const fs = require('fs')", print = FALSE)
+          private$fs_imported <- TRUE
+        }
+        
+        json_fs <- as_json_file(name, value, type) # write temp file
+        self$eval(json_fs$call, print = FALSE) # read temp file
+        unlink(json_fs$tempfile, force = TRUE) # delete temp file
+      }
+
+      # convert value to json array AND variable definition.
+      json <- as_json_string(name, value, type)
+      self$eval(json, print = FALSE)
+
+      invisible(self)
+    },
+#' @details
 #' Retrieve NodeJs objects
 #' 
-#' @param ... Bare name of objects to retreive.
+#' @param var Bare name of object to retrieve.
 #' 
 #' @examples
 #' \dontrun{
 #' n <- NodeSession$new()
 #' n$eval("var x = 12")
-#' n$eval("var y = 17")
-#' n$get(x, y)
+#' n$get(x)
 #' }
-    get = function(...){
-      var <- enquos(...)
-      var <- vapply(
-        var,
-        quo_name,
-        FUN.VALUE = character(1)
+    get = function(var){
+      var <- enquo(var)
+      var <- quo_name(var)
+
+      stringify <- paste0("JSON.stringify(", var, ", null, 0);")
+      node_object <- self$eval(stringify, print = FALSE)
+
+      # remove surrounding single quotes
+      node_object <- gsub("^'|'$", "", node_object)
+
+      # catch error is object is JSON
+      results <- tryCatch(
+        jsonlite::fromJSON(node_object),
+        error = function(e) e
       )
-      var <- sprintf(
-        "[%s]",
-        paste(var, collapse = ", ")
-      )
-      jsonlite::fromJSON(
-        self$eval(
-          var,
-          print = FALSE
-        )
-      )
+
+      return(results)
     },
 #' @details
 #' Retrieve NodeJs state
@@ -149,6 +204,9 @@ NodeSession <- R6::R6Class(
       }
 
     }
+  ),
+  private = list(
+    fs_imported = FALSE
   )
 )
 
@@ -236,11 +294,6 @@ Npm <- R6::R6Class(
       self$bin <- bin
 
       init <- system2(self$bin, "init -y", stdout = TRUE)
-
-      # ignore all on rbuildignore
-      # keep package.json in git for easy project share
-      git_ignore <- c("node_modules")
-      build_ignore <- c("package.json", "package-lock.json", git_ignore)
 
       cat(
         crayon::green(cli::symbol$pointer), " Add `", crayon::blue("node_modules"), "` to .gitignore\n",
