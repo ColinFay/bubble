@@ -6,7 +6,7 @@ set_node_engine <- function(
   bin = find_node()
 ){
   knitr::opts_chunk$set(
-    node = bubble::NodeSession$new()
+    node = bubble::NodeSession$new(bin = bin)
   )
   knitr::knit_engines$set(node = function(
     options

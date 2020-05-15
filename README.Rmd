@@ -1,5 +1,7 @@
 ---
-output: github_document
+output: 
+  github_document:
+    html_preview: false
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -56,10 +58,12 @@ n$eval("var x = 12")
 n$eval("var y = 17")
 n$eval("x + ")
 n$eval("y")
-# Return the x and y values
-x <- n$get(x, y)
+# Return the x value
+x <- n$get(x)
 class(x)
-sum(x)
+# Create a variable
+n$assign(vehicles, cars[1:5,])
+n$get(vehicles)
 n$state()
 n$kill()
 n$state()
@@ -120,6 +124,27 @@ Then, each chunck `{node}` will be evaluated in a Node session.
 
 You'll find an example in [inst/rmdexample.Rmd](inst/rmdexample.Rmd)
 
+
+### Using {bubble} with npm
+
+```{r, eval=FALSE}
+library(bubble)
+
+# install kmeans
+npm <- Npm$new()
+npm$install("ml-kmeans")
+
+n <- NodeSession$new()
+n$eval("const kmeans = require('ml-kmeans');")
+data <- dplyr::select_if(iris, is.numeric) 
+data <- unname(data)
+n$assign(iris, data)
+n$eval("var ans = kmeans(iris, 4);")
+n$get(ans) # get clusters
+n$terminate()
+
+npm$uninstall("ml-kmeans")
+```
 
 ## CoC
 
