@@ -5,3 +5,6 @@
 ^LICENSE\.md$
 ^readme-fig$
 ^readme-fig/node_repl\.gif$
+^package\.json$
+^package-lock\.json$
+^node_modules$

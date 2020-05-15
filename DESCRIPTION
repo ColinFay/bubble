@@ -19,9 +19,11 @@ Imports:
     R6,
     cli,
     crayon,
-    subprocess,
+    subprocess (>= 0.8.4),
     rlang,
     jsonlite,
     knitr,
     attempt
 RoxygenNote: 7.0.0
+Remotes:  
+    lbartnik/subprocess
